@@ -7,7 +7,13 @@
     "start": "node backend/server.js",
     "dev": "nodemon backend/server.js"
   },
-  "keywords": ["inventario", "computadoras", "express", "postgres", "crud"],
+  "keywords": [
+    "inventario",
+    "computadoras",
+    "express",
+    "postgres",
+    "crud"
+  ],
   "author": "Tu nombre",
   "license": "ISC",
   "dependencies": {
@@ -16,8 +22,8 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
-    "pg": "^8.11.3",
-    "pdfmake": "^0.2.7"
+    "pdfmake": "^0.2.7",
+    "pg": "^8.16.3"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
