@@ -197,32 +197,39 @@
       fetchData();
     }
 
-    /* ----------  DESCARGAR PDF (clásico)  ---------- */
-    function descargarPDF() {
-      window.open('http://localhost:3000/api/computadoras/reporte', '_blank');
-    }
-
-    /* ----------  IMPRIMIR PDF (descarga + cuadro de impresión)  ---------- */
-    async function imprimirPDF() {
+    /* ----------  DESCARGAR PDF (con token)  ---------- */
+    async function descargarPDF() {
       try {
-        // 1. Obtener el PDF como blob
         const res = await fetch('http://localhost:3000/api/computadoras/reporte', {
-          headers: { 'Authorization': token }
+          headers: { 'Authorization': localStorage.getItem('token') }
         });
         if (!res.ok) throw new Error('Error al generar PDF');
         const blob = await res.blob();
-
-        // 2. Crear URL temporal
         const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'inventario.pdf';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+      } catch (err) {
+        alert('No se pudo descargar: ' + err.message);
+      }
+    }
 
-        // 3. Abrir en ventana pequeña
+    /* ----------  IMPRIMIR PDF (con token)  ---------- */
+    async function imprimirPDF() {
+      try {
+        const res = await fetch('http://localhost:3000/api/computadoras/reporte', {
+          headers: { 'Authorization': localStorage.getItem('token') }
+        });
+        if (!res.ok) throw new Error('Error al generar PDF');
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
         const nuevaVentana = window.open(url, '_blank', 'width=800,height=600');
-
-        // 4. Al cargar, mandar a imprimir
         nuevaVentana.onload = () => {
           nuevaVentana.print(); // aparece el diálogo de impresión
-          // (opcional) cerrar después de imprimir:
-          // nuevaVentana.onafterprint = () => nuevaVentana.close();
         };
       } catch (err) {
         alert('No se pudo imprimir: ' + err.message);
