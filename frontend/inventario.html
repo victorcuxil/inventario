@@ -96,7 +96,7 @@
           <div class="col-md-1"><input class="form-control" placeholder="RAM" id="ram" required></div>
           <div class="col-md-1"><input class="form-control" placeholder="Disco" id="disco" required></div>
           <div class="col-md-2"><input class="form-control" placeholder="Sistema Operativo" id="so" required></div>
-          <div class="col-md-2"><input class="form-control" placeholder="Laboratorio" id="lab" required></div>
+          <div class="col-md-2"><input class="form-control" placeholder="Ubicación" id="lab" required></div>
           <div class="col-md-2">
             <label class="form-label">Fecha</label>
             <input class="form-control" type="date" id="fecha_registro" required>
@@ -137,7 +137,7 @@
                 <th>RAM</th>
                 <th>Disco</th>
                 <th>SO</th>
-                <th>Laboratorio</th>
+                <th>Ubicación</th>
                 <th>Fecha</th>
                 <th>Responsable</th>
                 <th>Acciones</th>
@@ -225,6 +225,7 @@
         body: JSON.stringify(nueva)
       });
       fetchData();
+      mostrarMensaje(); // ✅ aquí se activa el mensaje
       e.target.reset();
     });
 
@@ -356,6 +357,7 @@
 
     // Llamar al mensaje después de agregar
     fetchData();
+    mostrarMensaje(); // ✅ activa el mensaje
   </script>
 </body>
 </html>
