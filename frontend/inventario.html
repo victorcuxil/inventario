@@ -26,32 +26,38 @@
       font-weight: 600;
     }
     .card-form {
-      border-radius: .5rem;
-      box-shadow: 0 2px 10px rgba(0,0,0,.08);
+        border-radius: .5rem;
+        box-shadow: 0 2px 10px rgba(0,0,0,.08);
     }
     .table-hover tbody tr:hover {
-      background-color: #e9ecef;
+        background-color: #e9ecef;
     }
     .btn-actions .btn {
-      margin-right: .25rem;
+        margin-right: .25rem;
     }
     .logo-nav {
-      height: 40px;
-      margin-right: .5rem;
+        height: 40px;
+        margin-right: .5rem;
     }
     .footer-custom {
-      background: var(--liceo-rojo);
-      color: var(--liceo-blanco);
-      padding: 2rem 0;
-      margin-top: 4rem;
+        background: var(--liceo-rojo);
+        color: var(--liceo-blanco);
+        padding: 2rem 0;
+        margin-top: 4rem;
     }
     .btn-primary {
-      background-color: var(--liceo-rojo-claro);
-      border-color: var(--liceo-rojo-claro);
+        background-color: var(--liceo-rojo-claro);
+        border-color: var(--liceo-rojo-claro);
     }
     .btn-primary:hover {
-      background-color: #152a61;
-      border-color: #152a61;
+        background-color: #152a61;
+        border-color: #152a61;
+    }
+    /* Mensaje de éxito */
+    .alert-success {
+        background-color: #d1e7dd;
+        border-color: #badbcc;
+        color: #0f5132;
     }
   </style>
 </head>
@@ -64,13 +70,13 @@
       </a>
       <div>
         <button class="btn btn-outline-light btn-sm" onclick="descargarPDF()">
-          <i class="bi bi-download"></i> Descargar PDF
+            <i class="bi bi-download"></i> Descargar PDF
         </button>
         <button class="btn btn-outline-info btn-sm ms-2" onclick="imprimirPDF()">
-          <i class="bi bi-printer"></i> Imprimir PDF
+            <i class="bi bi-printer"></i> Imprimir PDF
         </button>
         <button class="btn btn-outline-danger btn-sm ms-2" onclick="cerrarSesion()">
-          <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+            <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
         </button>
       </div>
     </div>
@@ -105,6 +111,13 @@
             </button>
           </div>
         </form>
+
+        <!-- ✅ Mensaje de éxito (inicialmente oculto) -->
+        <div id="mensajeExito" class="alert alert-success alert-dismissible fade d-none mt-3" role="alert">
+          <i class="bi bi-check-circle-fill me-2"></i>
+          <strong>¡Éxito!</strong> Computadora agregada satisfactoriamente.
+          <button type="button" class="btn-close" onclick="ocultarMensaje()"></button>
+        </div>
       </div>
     </div>
 
@@ -223,11 +236,11 @@
       fetchData();
     }
 
-    /* ----------  EDICIÓN INLINE (AHORA SÍ EXISTE)  ---------- */
+    /* ----------  EDICIÓN INLINE (YA FUNCIONANDO)  ---------- */
     let filaEditando = null;
 
     function editar(id) {
-      if (filaEditando) return; // solo una fila a la vez
+      if (filaEditando) return;
       const fila = document.getElementById(`fila-${id}`);
       if (!fila) return;
       filaEditando = id;
@@ -235,13 +248,11 @@
       const celdas = fila.querySelectorAll('td');
       const campos = ['marca', 'modelo', 'procesador', 'ram', 'disco', 'sistema_operativo', 'laboratorio', 'fecha_registro', 'responsable'];
 
-      // Convertir cada celda en input
       campos.forEach((campo, i) => {
         const tipo = campo === 'fecha_registro' ? 'date' : 'text';
         celdas[i].innerHTML = `<input class="form-control form-control-sm" type="${tipo}" id="${campo}-${id}" value="${celdas[i].innerText}">`;
       });
 
-      // Botones Guardar / Cancelar
       celdas[campos.length].innerHTML = `
         <button class="btn btn-sm btn-success" onclick="guardarCambios(${id})">Guardar</button>
         <button class="btn btn-sm btn-secondary ms-1" onclick="cancelarEdicion(${id})">Cancelar</button>
@@ -314,7 +325,7 @@
         const url = window.URL.createObjectURL(blob);
         const nuevaVentana = window.open(url, '_blank', 'width=800,height=600');
         nuevaVentana.onload = () => {
-          nuevaVentana.print();
+            nuevaVentana.print();
         };
       } catch (err) {
         alert('No se pudo imprimir: ' + err.message);
@@ -323,9 +334,27 @@
 
     function cerrarSesion() {
       localStorage.removeItem('token');
-      location.href = 'login.html';
+        location.href = 'login.html';
     }
 
+    /* ----------  MENSAJE DE ÉXITO AL AGREGAR  ---------- */
+    function mostrarMensaje() {
+      const mensaje = document.getElementById('mensajeExito');
+      mensaje.classList.remove('d-none');
+      mensaje.classList.add('show');
+      setTimeout(() => {
+        mensaje.classList.remove('show');
+        mensaje.classList.add('d-none');
+      }, 3000); // desaparece después de 3 segundos
+    }
+
+    function ocultarMensaje() {
+      const mensaje = document.getElementById('mensajeExito');
+      mensaje.classList.remove('show');
+      mensaje.classList.add('d-none');
+    }
+
+    // Llamar al mensaje después de agregar
     fetchData();
   </script>
 </body>
